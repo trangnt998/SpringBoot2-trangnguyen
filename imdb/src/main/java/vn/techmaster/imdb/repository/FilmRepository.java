@@ -51,9 +51,14 @@ public class FilmRepository implements IFilmRepo {
     }
 
     @Override
-    public Entry<Integer, Integer> yearMakeMostFilms() {
+    public Optional<Entry<Integer, Long>> yearMakeMostFilms() {
         // TODO Auto-generated method stub
-        return null;
+
+        return films.stream()
+                .collect(
+                        Collectors.groupingBy(Film::getYear,
+                        Collectors.counting())).entrySet()
+                .stream().max(Entry.comparingByValue());
     }
 
     @Override
@@ -67,7 +72,10 @@ public class FilmRepository implements IFilmRepo {
     @Override
     public List<Film> getFilmsMadeByCountryFromYearToYear(String country, int fromYear, int toYear) {
         // TODO Auto-generated method stub
-        return null;
+        return films.stream()
+                .filter(film -> film.getCountry().equals(country))
+                .filter(film -> film.getYear() >= fromYear && film.getYear() <= toYear)
+                .toList();
     }
 
     @Override

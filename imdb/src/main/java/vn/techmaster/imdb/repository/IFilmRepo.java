@@ -15,11 +15,10 @@ public interface IFilmRepo {
   public List<Film> getFilmsMadeByCountryFromYearToYear(String country, int fromYear, int toYear);
 
   //Nước nào sản xuất nhiều film nhất, số lượng bao nhiêu?
-//  public Map.Entry<String, Integer> getcountryMakeMostFilms();
   public Optional<Map.Entry<String, Long>> getcountryMakeMostFilms();
 
   //Năm nào sản xuất nhiều film nhất, số lượng bao nhiêu?
-  public Map.Entry<Integer, Integer> yearMakeMostFilms();
+  public Optional<Map.Entry<Integer, Long>> yearMakeMostFilms();
 
   //Danh sách tất cả thể loại film
   public List<String> getAllGeneres();

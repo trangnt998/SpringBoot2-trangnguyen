@@ -58,20 +58,20 @@ class FilmRepoTest {
         assertThat(films).containsAll(generes);
     }
 
-    @Test
-    @DisplayName("categorizeFilmByGenere: Phân loại phim theo thể loại")
-    public void categorizeFilmByGenere() {
-        var generesFilms = filmRepo.categorizeFilmByGenere();
-        var generes = filmRepo.getAll()
-                .stream().map(Film::getGeneres)
-                .flatMap(List::stream)
-                .distinct()
-                .peek(System.out::println)
-                .toList();
-
-        generesFilms.forEach(((s, films) -> System.out.println()));
-        assertThat(generes).containsAll(generesFilms.keySet());
-    }
+//    @Test
+//    @DisplayName("categorizeFilmByGenere: Phân loại phim theo thể loại")
+//    public void categorizeFilmByGenere() {
+//        var generesFilms = filmRepo.categorizeFilmByGenere();
+//        var generes = filmRepo.getAll()
+//                .stream().map(Film::getGeneres)
+//                .flatMap(List::stream)
+//                .distinct()
+//                .peek(System.out::println)
+//                .toList();
+//
+//        generesFilms.forEach(((s, films) -> System.out.println()));
+//        assertThat(generes).containsAll(generesFilms.keySet());
+//    }
 
     @Test
     @DisplayName("top5HighMarginFilms: Top 5 phim lãi nhất")
@@ -99,6 +99,21 @@ class FilmRepoTest {
     public void getcountryMakeMostFilms(){
         var result = filmRepo.getcountryMakeMostFilms();
         System.out.println(result);
+        assertThat(result.get().getValue()).isEqualTo(9);
+    }
+
+    @Test
+    public void yearMakeMostFilms(){
+        var result = filmRepo.yearMakeMostFilms();
+        System.out.println(result);
+        assertThat(result.get().getValue()).isEqualTo(4);
+    }
+
+    @Test
+    public void getFilmsMadeByCountryFromYearToYear(){
+        var result = filmRepo.getFilmsMadeByCountryFromYearToYear("China", 1990, 1991);
+        System.out.println(result);
+        assertThat(result.size()).isEqualTo(1);
     }
 
 
