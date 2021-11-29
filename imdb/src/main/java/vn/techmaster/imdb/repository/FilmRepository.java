@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,8 +46,8 @@ public class FilmRepository implements IFilmRepo {
 
         return films.stream()
                 .collect(
-                    Collectors.groupingBy(Film::getCountry,
-                    Collectors.counting())).entrySet()
+                        Collectors.groupingBy(Film::getCountry,
+                                Collectors.counting())).entrySet()
                 .stream().max(Entry.comparingByValue());
     }
 
@@ -57,17 +58,10 @@ public class FilmRepository implements IFilmRepo {
         return films.stream()
                 .collect(
                         Collectors.groupingBy(Film::getYear,
-                        Collectors.counting())).entrySet()
+                                Collectors.counting())).entrySet()
                 .stream().max(Entry.comparingByValue());
     }
 
-    @Override
-    public List<String> getAllGeneres() {
-        // TODO Auto-generated method stub
-        var generesList = films.stream().map(Film::getGeneres).toList();
-        return generesList.stream().flatMap(List::stream).distinct()
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<Film> getFilmsMadeByCountryFromYearToYear(String country, int fromYear, int toYear) {
@@ -76,13 +70,9 @@ public class FilmRepository implements IFilmRepo {
                 .filter(film -> film.getCountry().equals(country))
                 .filter(film -> film.getYear() >= fromYear && film.getYear() <= toYear)
                 .toList();
+
     }
 
-    @Override
-    public Map<String, List<Film>> categorizeFilmByGenere() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public List<Film> top5HighMarginFilms() {
@@ -101,18 +91,14 @@ public class FilmRepository implements IFilmRepo {
         Comparator<Film> comparator = (f1, f2) -> (f1.getRevenue() - f1.getCost() - (f2.getRevenue() - f2.getCost()));
         comparator = comparator.reversed();
         return films.stream()
-                .filter(film -> film.getYear() > 1990 && film.getYear() < 2000)
+                .filter(film -> film.getYear() >= 1990 && film.getYear() <= 2000)
                 .sorted(comparator)
                 .limit(5)
                 .peek(System.out::println)
                 .collect(Collectors.toList());
+
     }
 
-    @Override
-    public double ratioBetweenGenere(String genreX, String genreY) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
     @Override
     public List<Film> top5FilmsHighRatingButLowMargin() {
@@ -123,6 +109,39 @@ public class FilmRepository implements IFilmRepo {
                 .limit(5)
                 .peek(System.out::println)
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<String> getAllGeneres() {
+        // TODO Auto-generated method stub
+        var generesList = films.stream().map(Film::getGeneres).toList();
+        return generesList.stream().flatMap(List::stream).distinct()
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Map<String, List<Film>> categorizeFilmByGenere() {
+        var types = getAllGeneres();
+
+        return types.stream()
+                .map(unittype -> new ArrayList<Object>() {{
+                            add(unittype);
+                            add(films.stream()
+                                    .filter(film -> film.getGeneres().contains(unittype))
+                                    .collect(Collectors.toList()));
+                        }}
+                )
+                .peek(System.out::println)
+                .collect(Collectors.toMap(e -> (String) e.get(0), e -> (List<Film>) e.get(1)));
+    }
+
+
+    @Override
+    public double ratioBetweenGenere(String genreX, String genreY) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

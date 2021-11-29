@@ -1,17 +1,13 @@
 package vn.techmaster.imdb;
 
-import java.security.Key;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import vn.techmaster.imdb.model.Film;
 import vn.techmaster.imdb.repository.FilmRepository;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -96,25 +92,37 @@ class FilmRepoTest {
     }
 
     @Test
-    public void getcountryMakeMostFilms(){
+    public void getcountryMakeMostFilms() {
         var result = filmRepo.getcountryMakeMostFilms();
         System.out.println(result);
         assertThat(result.get().getValue()).isEqualTo(9);
+
     }
 
     @Test
-    public void yearMakeMostFilms(){
+    public void yearMakeMostFilms() {
         var result = filmRepo.yearMakeMostFilms();
         System.out.println(result);
         assertThat(result.get().getValue()).isEqualTo(4);
+
     }
 
     @Test
-    public void getFilmsMadeByCountryFromYearToYear(){
+    public void getFilmsMadeByCountryFromYearToYear() {
         var result = filmRepo.getFilmsMadeByCountryFromYearToYear("China", 1990, 1991);
         System.out.println(result);
         assertThat(result.size()).isEqualTo(1);
+
     }
+
+    @Test
+    public void categorizeFilmByGenere(){
+        filmRepo.categorizeFilmByGenere();
+
+    }
+
+
+
 
 
 }
